@@ -53,8 +53,10 @@ app.use("/api/users",usersRouter)
 const httpServer=app.listen(PORT, () => {
     try {
         console.log(`Listening to the port ${PORT}\nAcceder a:`)
-        console.log(`\t1). http://localhost:${PORT}`)
+        console.log(`\t1). http://localhost:${PORT} (BD JSON)`)
         console.log(`\t2). http://localhost:${PORT}/realTimeProducts/`)
+        console.log(`\t3). http://localhost:${PORT}/api/products (BD Moongose)`);
+        console.log(`\t4). http://localhost:${PORT}/api/messages (BD Moongose)`);
 
     }
     catch (err) {
