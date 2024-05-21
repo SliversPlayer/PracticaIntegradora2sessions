@@ -1,4 +1,4 @@
-import ProductManager from "../ProductManager.js"
+import ProductManager from "../dao/ProductManager.js"
 import { __dirname } from "../../utils.js"
 const pm = new ProductManager(__dirname+'/src/bbdd.json')
 

@@ -1,35 +1,66 @@
-import {Router} from "express"
-import ProductManager from "../ProductManager.js";
-import { __dirname } from "../../utils.js";
+import { Router } from "express";
+import productModel from "../models/product.model.js";
 
-const manager = new ProductManager("../bbdd.json");
+const routerP = Router();
 
-const routerP =Router()
+// Obtener todos los productos
+routerP.get("/products", async (req, res) => {
+    try {
+        const products = await productModel.find(req.query);
+        res.json({ products });
+    } catch (error) {
+        res.status(500).json({ status: "error", message: error.message });
+    }
+});
 
-routerP.get("/products",async(req,res)=>{
-    const products= await manager.getProducts(req.query)
-    res.json({products})
-})
-
+// Obtener un producto por ID
 routerP.get("/products/:pid", async (req, res) => {
-    const productfind = await manager.getProductbyId(req.params)
-    res.json({ status: "success", productfind })
-})
+    try {
+        const product = await productModel.findById(req.params.pid);
+        if (!productModel) {
+            return res.status(404).json({ status: "error", message: "Producto no encontrado" });
+        }
+        res.json({ status: "success", productModel });
+    } catch (error) {
+        res.status(500).json({ status: "error", message: error.message });
+    }
+});
 
+// Crear un nuevo producto
 routerP.post("/products", async (req, res) => {
-    const newproduct = await manager.addProduct(req.body);
-    res.json({ status: "success", newproduct })
-})
+    try {
+        const newProduct = new productModel(req.body);
+        const savedProduct = await newProduct.save();
+        res.status(201).json({ status: "success", product: savedProduct });
+    } catch (error) {
+        res.status(400).json({ status: "error", message: error.message });
+    }
+});
 
+// Actualizar un producto por ID
 routerP.put("/products/:pid", async (req, res) => {
-    const updatedproduct = await manager.updateProduct(req.params,req.body)
-    res.json({ status: "success", updatedproduct })
-})
+    try {
+        const updatedProduct = await productModel.findByIdAndUpdate(req.params.pid, req.body, { new: true });
+        if (!updatedProduct) {
+            return res.status(404).json({ status: "error", message: "Producto no encontrado" });
+        }
+        res.json({ status: "success", product: updatedProduct });
+    } catch (error) {
+        res.status(400).json({ status: "error", message: error.message });
+    }
+});
 
+// Eliminar un producto por ID
 routerP.delete("/products/:pid", async (req, res) => {
-    const id=parseInt(req.params.pid)
-    const deleteproduct = await manager.deleteProduct(id)
-    res.json({ status: "success",deleteproduct })
-})
+    try {
+        const deletedProduct = await productModel.findByIdAndDelete(req.params.pid);
+        if (!deletedProduct) {
+            return res.status(404).json({ status: "error", message: "Producto no encontrado" });
+        }
+        res.json({ status: "success", product: deletedProduct });
+    } catch (error) {
+        res.status(500).json({ status: "error", message: error.message });
+    }
+});
 
-export default routerP
+export default routerP;
