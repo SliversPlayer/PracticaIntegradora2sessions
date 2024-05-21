@@ -4,7 +4,7 @@ import productModel from "../models/product.model.js";
 const routerP = Router();
 
 // Obtener todos los productos
-routerP.get("/products", async (req, res) => {
+routerP.get("/", async (req, res) => {
     try {
         const products = await productModel.find(req.query);
         res.json({ products });
@@ -27,7 +27,7 @@ routerP.get("/products/:pid", async (req, res) => {
 });
 
 // Crear un nuevo producto
-routerP.post("/products", async (req, res) => {
+routerP.post("/", async (req, res) => {
     try {
         const newProduct = new productModel(req.body);
         const savedProduct = await newProduct.save();

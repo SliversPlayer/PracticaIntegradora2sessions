@@ -25,6 +25,9 @@ let conString = `mongodb+srv://usuario1:${pass}@cluster0.24yvhip.mongodb.net/${d
 
 mongoose.connect(conString).then(()=>{console.log("Conectado")}).catch(error=>console.error("Error en la conexión",error))
 
+app.use(express.json())
+
+
 
 //Modificado según indicación de WM
 app.use(express.static(__dirname + "/src/public"))
