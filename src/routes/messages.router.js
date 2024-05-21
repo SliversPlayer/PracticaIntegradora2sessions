@@ -1,21 +1,31 @@
-import {Router} from 'express';
+import express from 'express';
 import messageModel from '../models/message.model.js';
-//Import modelo de usuario
 
-const router = Router();
+const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send('Hello from users router')
-})
+// Ruta para obtener todos los mensajes
+router.get('/', async (req, res) => {
+    try {
+        const messages = await messageModel.find();
+        //res.json(messages);
+        res.render("chat",{messages})
+    } catch (error) {
+        console.error('Error al obtener mensajes de la base de datos:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
 
-router.post('/', (req, res) => {
-    res.send('Post request to the homepage')
-})
-router.put('/', (req, res) => {
-    res.send('Put request to the homepage')
-})
-router.delete('/', (req, res) => {
-    res.send('Delete request to the homepage')
-})
+// Ruta para enviar un mensaje
+router.post('/', async (req, res) => {
+    try {
+        const { user, message } = req.body;
+        const newMessage = new messageModel({ user, message });
+        await newMessage.save();
+        res.status(201).json(newMessage);
+    } catch (error) {
+        console.error('Error al guardar el mensaje en la base de datos:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
 
 export default router;

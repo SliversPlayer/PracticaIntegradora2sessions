@@ -1,0 +1,15 @@
+<h1>Chat</h1>
+
+<div id="chat-box">
+    {{#each messages}}
+    <div class="message">
+        <strong>{{user}}</strong>: {{message}}
+    </div>
+    {{/each}}
+</div>
+
+<form action="/api/messages" method="POST">
+    <input type="text" name="user" placeholder="Usuario">
+    <input type="text" name="message" placeholder="Mensaje">
+    <button type="submit">Enviar</button>
+</form>
