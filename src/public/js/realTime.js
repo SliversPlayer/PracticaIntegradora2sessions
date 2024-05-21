@@ -21,9 +21,7 @@ function updateProductList(productList) {
             <li>description: ${product.description}</li>
             <li>price: $${product.price}</li>
             <li>category: ${product.category}</li>
-            <li>status: ${product.status}</li>
             <li>stock: ${product.stock}</li>
-            thumbnail: <img src="${product.thumbnail}" alt="img" class="img-thumbnail img-fluid">        </ul>
             </p>
         </div>
         <div class="d-flex justify-content-center mb-4">

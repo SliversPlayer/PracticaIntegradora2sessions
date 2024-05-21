@@ -6,8 +6,9 @@ const routerP = Router();
 // Obtener todos los productos
 routerP.get("/", async (req, res) => {
     try {
-        const products = await productModel.find(req.query);
-        res.json({ products });
+        const products = await productModel.find(req.query).lean();
+        //res.json({ products });
+        res.render("products",{products})
     } catch (error) {
         res.status(500).json({ status: "error", message: error.message });
     }
