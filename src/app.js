@@ -13,6 +13,8 @@ import usersRouter from '../src/routes/users.router.js';
 import viewsRouter from '../src/routes/views.router.js';
 import socketProducts from "./listener/socketProducts.js"
 
+//test
+
 const app = express()
 const PORT=8080
 
