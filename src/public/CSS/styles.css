@@ -15,3 +15,12 @@ body {
     color: #fff; /* Color del texto del encabezado */
 }
 
+.pagination-nav {
+    width: 200px; /* Establece el ancho deseado */
+}
+
+.pagination-container {
+    width: 200px; /* Establece el ancho deseado */
+    display: flex; /* Usa flexbox para alinear los elementos horizontalmente */
+    align-items: center; /* Centra verticalmente los elementos */
+}

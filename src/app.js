@@ -10,10 +10,12 @@ import cartsRouter from '../src/routes/carts.router.js';
 import messagesRouter from '../src/routes/messages.router.js';
 import usersRouter from '../src/routes/users.router.js';
 
+
 import viewsRouter from '../src/routes/views.router.js';
 import socketProducts from "./listener/socketProducts.js"
 
-//
+import productModel from './models/product.model.js';
+
 
 const app = express()
 const PORT=8080
@@ -23,17 +25,28 @@ app.use(express.static(__dirname + "/src/public"))
 app.engine("handlebars",handlebars.engine())
 app.set('views', path.join(__dirname, '/src/views'));
 app.set("view engine","handlebars")
+
+//Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 
 //Datos de conexión a moongose
-let db = "ecommerce"
-let pass = "123456a."
+const environment = async () => {
 
-let conString = `mongodb+srv://usuario1:${pass}@cluster0.24yvhip.mongodb.net/${db}?retryWrites=true&w=majority&appName=Cluster0`
+    let db = "ecommerce"
+    let pass = "123456a."
+    let conString = `mongodb+srv://usuario1:${pass}@cluster0.24yvhip.mongodb.net/${db}?retryWrites=true&w=majority&appName=Cluster0`
 
-mongoose.connect(conString).then(()=>{console.log("Conectado")}).catch(error=>console.error("Error en la conexión",error))
+    await mongoose.connect(conString,{
+        serverSelectionTimeoutMS: 30000 // Aumenta el tiempo de espera a 30 segundos
+    }).then(()=>{console.log("Conectado")}).catch(error=>console.error("Error en la conexión",error))
+
+    let products = await productModel.paginate({description: "null"}, {limit:5, page:1})
+    //console.log(products);
+}
+
+environment();
 
 // Middleware para manejar las rutas de productos
 app.use('/', viewsRouter)

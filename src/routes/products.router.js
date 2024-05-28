@@ -3,25 +3,54 @@ import productModel from "../models/product.model.js";
 
 const routerP = Router();
 
-// Obtener todos los productos
-routerP.get("/", async (req, res) => {
+// Obtener todos los productos con paginación
+routerP.get('/', async (req, res) => {
     try {
-        const products = await productModel.find(req.query).lean();
-        //res.json({ products });
-        res.render("products",{products})
+        let page = parseInt(req.query.page) || 1;
+        let limit = parseInt(req.query.limit) || 10;
+        let category = req.query.category || '';
+        let sort = req.query.sort || '';
+
+        const query = {}; // Objeto de consulta inicial
+
+        // Si se proporciona una categoría, agregarla a la consulta
+        if (category) {
+            query.category = category;
+        }
+
+        const options = {
+            page,
+            limit,
+            lean: true,
+        };
+
+        // Comprueba si existe algún parámetro de orden
+        if (sort === 'asc') {
+            options.sort = { price: 1 }; // Ascendente
+        } else if (sort === 'desc') {
+            options.sort = { price: -1 }; // Descendente
+        }
+
+        const result = await productModel.paginate(query, options);
+
+        result.prevLink = result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : '';
+        result.nextLink = result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : '';
+        result.isValid = !(page <= 0 || page > result.totalPages);
+
+        res.render("products", { products: result.docs, pagination: result });
     } catch (error) {
-        res.status(500).json({ status: "error", message: error.message });
+        console.error("Error fetching products:", error);
+        res.status(500).json({ status: "error", message: "Internal server error" });
     }
 });
 
-// Obtener un producto por ID
 routerP.get("/products/:pid", async (req, res) => {
     try {
         const product = await productModel.findById(req.params.pid);
-        if (!productModel) {
+        if (!product) { 
             return res.status(404).json({ status: "error", message: "Producto no encontrado" });
         }
-        res.json({ status: "success", productModel });
+        res.render("product_details", { product: product });
     } catch (error) {
         res.status(500).json({ status: "error", message: error.message });
     }
