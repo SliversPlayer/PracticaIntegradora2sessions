@@ -44,7 +44,7 @@ routerP.get('/', async (req, res) => {
     }
 });
 
-routerP.get("/products/:pid", async (req, res) => {
+routerP.get('/products/:pid', async (req, res) => {
     try {
         const product = await productModel.findById(req.params.pid);
         if (!product) { 
@@ -57,7 +57,7 @@ routerP.get("/products/:pid", async (req, res) => {
 });
 
 // Crear un nuevo producto
-routerP.post("/", async (req, res) => {
+routerP.post('/', async (req, res) => {
     try {
         const newProduct = new productModel(req.body);
         const savedProduct = await newProduct.save();
@@ -68,7 +68,7 @@ routerP.post("/", async (req, res) => {
 });
 
 // Actualizar un producto por ID
-routerP.put("/products/:pid", async (req, res) => {
+routerP.put('/products/:pid', async (req, res) => {
     try {
         const updatedProduct = await productModel.findByIdAndUpdate(req.params.pid, req.body, { new: true });
         if (!updatedProduct) {
@@ -81,7 +81,7 @@ routerP.put("/products/:pid", async (req, res) => {
 });
 
 // Eliminar un producto por ID
-routerP.delete("/products/:pid", async (req, res) => {
+routerP.delete('/products/:pid', async (req, res) => {
     try {
         const deletedProduct = await productModel.findByIdAndDelete(req.params.pid);
         if (!deletedProduct) {
