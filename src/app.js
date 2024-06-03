@@ -11,7 +11,7 @@ import { Server } from 'socket.io';
 import productsRouter from '../src/routes/products.router.js';
 import cartsRouter from '../src/routes/carts.router.js';
 import messagesRouter from '../src/routes/messages.router.js';
-import usersRouter from '../src/routes/users.router.js';
+//import usersRouter from './routes/Xusers.router.jsX';
 import viewsRouter from '../src/routes/views.router.js';
 import socketProducts from './listener/socketProducts.js';
 import sessionsRouter from './routes/api/sessions.js';
@@ -61,16 +61,17 @@ app.use('/', viewsRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
-app.use('/api/users', usersRouter);
-app.use('/sessions', sessionsRouter);
+//app.use('/api/users', usersRouter);
+app.use('/api/sessions', sessionsRouter);
 
 const httpServer = app.listen(PORT, () => {
     try {
         console.log(`Listening to the port ${PORT}\nAcceder a:`);
-        console.log(`\t1). http://localhost:${PORT} (BD JSON)`);
-        console.log(`\t2). http://localhost:${PORT}/realTimeProducts/`);
-        console.log(`\t3). http://localhost:${PORT}/api/products (BD Moongose)`);
-        console.log(`\t4). http://localhost:${PORT}/api/messages (BD Moongose)`);
+        //console.log(`\t1). http://localhost:${PORT} (BD JSON)`);
+        //console.log(`\t2). http://localhost:${PORT}/realTimeProducts/`);
+        console.log(`\t1). http://localhost:${PORT}/api/products`);
+        console.log(`\t2). http://localhost:${PORT}/api/messages`);
+        console.log(`\t3). http://localhost:${PORT}/login`);
     } catch (err) {
         console.log(err);
     }
