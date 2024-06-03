@@ -1,7 +1,13 @@
 import mongoose from 'mongoose';
 
 //Modulo para conectar a server
-mongoose.connect('mongodb+srv://omar:123789@cluster0.3lmci0d.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+
+let base = "ecommerce"
+let pass = "123456a."
+let conString = `mongodb+srv://usuario1:${pass}@cluster0.24yvhip.mongodb.net/${base}?retryWrites=true&w=majority&appName=Cluster0`
+
+
+mongoose.connect(conString);
 
 const db = mongoose.connection;
 

@@ -1,75 +1,82 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
-import mongoose, { mongo } from 'mongoose'
-import { __dirname } from "../utils.js"
-import { Server } from 'socket.io';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+import mongoose from 'mongoose';
 import path from 'path';
+import { __dirname } from '../utils.js';
+import { Server } from 'socket.io';
 
+// Importa tus routers y otros módulos necesarios
 import productsRouter from '../src/routes/products.router.js';
 import cartsRouter from '../src/routes/carts.router.js';
 import messagesRouter from '../src/routes/messages.router.js';
 import usersRouter from '../src/routes/users.router.js';
 import viewsRouter from '../src/routes/views.router.js';
-import socketProducts from "./listener/socketProducts.js"
+import socketProducts from './listener/socketProducts.js';
+import sessionsRouter from './routes/api/sessions.js';
 
-import productModel from './models/product.model.js';
+const app = express();
+const PORT = 8080;
 
+// Variables de conexión
+const db = 'ecommerce';
+const user = 'usuario1';
+const pass = encodeURIComponent('123456a.');
+const conString = `mongodb+srv://${user}:${pass}@cluster0.24yvhip.mongodb.net/${db}?retryWrites=true&w=majority&appName=Cluster0`;
 
-const app = express()
-const PORT=8080
+// Conexión a MongoDB
+mongoose.connect(conString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    console.log('Conectado a MongoDB');
+}).catch((error) => {
+    console.error('Error conectándose a MongoDB', error);
+});
 
+// Configuración de archivos estáticos
 app.use(express.static(path.join(__dirname, 'src', 'public')));
+app.use(express.static(__dirname + "/src/public"));
 
-app.use(express.static(__dirname + "/src/public"))
-//handlebars
-app.engine("handlebars",handlebars.engine())
-//app.set('views', path.join(__dirname, '/src/views'));
+// Configuración de Handlebars
+app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'src', 'views'));
-app.set("view engine","handlebars")
+app.set('view engine', 'handlebars');
 
-//Middleware
-app.use(express.json())
+// Middleware
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Configuración de la sesión
+app.use(session({
+    secret: 'secretkey',
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: conString }),
+    // cookie: { maxAge: 180 * 60 * 1000 },
+}));
 
-//Datos de conexión a moongose
-const environment = async () => {
+// Middleware para manejar las rutas
+app.use('/', viewsRouter);
+app.use('/api/messages', messagesRouter);
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/sessions', sessionsRouter);
 
-    let db = "ecommerce"
-    let pass = "123456a."
-    let conString = `mongodb+srv://usuario1:${pass}@cluster0.24yvhip.mongodb.net/${db}?retryWrites=true&w=majority&appName=Cluster0`
-
-    await mongoose.connect(conString,{
-        serverSelectionTimeoutMS: 30000 // Aumenta el tiempo de espera a 30 segundos
-    }).then(()=>{console.log("Conectado")}).catch(error=>console.error("Error en la conexión",error))
-
-    let products = await productModel.paginate({description: "null"}, {limit:5, page:1})
-    //console.log(products);
-}
-
-environment();
-
-// Middleware para manejar las rutas de productos
-app.use('/', viewsRouter)
-app.use("/api/messages",messagesRouter)
-app.use("/api/products",productsRouter)
-app.use("/api/carts",cartsRouter)
-app.use("/api/users",usersRouter)
-
-const httpServer=app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
     try {
-        console.log(`Listening to the port ${PORT}\nAcceder a:`)
-        console.log(`\t1). http://localhost:${PORT} (BD JSON)`)
-        console.log(`\t2). http://localhost:${PORT}/realTimeProducts/`)
+        console.log(`Listening to the port ${PORT}\nAcceder a:`);
+        console.log(`\t1). http://localhost:${PORT} (BD JSON)`);
+        console.log(`\t2). http://localhost:${PORT}/realTimeProducts/`);
         console.log(`\t3). http://localhost:${PORT}/api/products (BD Moongose)`);
         console.log(`\t4). http://localhost:${PORT}/api/messages (BD Moongose)`);
-
+    } catch (err) {
+        console.log(err);
     }
-    catch (err) {
-        console.log(err)
-    }
-})
+});
 
-const socketServer = new Server(httpServer)
+const socketServer = new Server(httpServer);
 
-socketProducts(socketServer)
+socketProducts(socketServer);
