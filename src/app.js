@@ -9,8 +9,6 @@ import productsRouter from '../src/routes/products.router.js';
 import cartsRouter from '../src/routes/carts.router.js';
 import messagesRouter from '../src/routes/messages.router.js';
 import usersRouter from '../src/routes/users.router.js';
-
-
 import viewsRouter from '../src/routes/views.router.js';
 import socketProducts from "./listener/socketProducts.js"
 
@@ -20,10 +18,13 @@ import productModel from './models/product.model.js';
 const app = express()
 const PORT=8080
 
+app.use(express.static(path.join(__dirname, 'src', 'public')));
+
 app.use(express.static(__dirname + "/src/public"))
 //handlebars
 app.engine("handlebars",handlebars.engine())
-app.set('views', path.join(__dirname, '/src/views'));
+//app.set('views', path.join(__dirname, '/src/views'));
+app.set('views', path.join(__dirname, 'src', 'views'));
 app.set("view engine","handlebars")
 
 //Middleware

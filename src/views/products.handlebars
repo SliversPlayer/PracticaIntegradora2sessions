@@ -2,9 +2,6 @@
     <div class="text-center mb-3"> <!-- Contenedor para centrar horizontalmente -->
         <h1>Productos</h1>
     </div>
-
-
-
     <!-- Formulario de búsqueda por categoría, límite y ordenamiento de productos -->
     <div class="row mb-3">
         <!-- Columna para el formulario de búsqueda por categoría -->
@@ -60,7 +57,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{this.title}}</h5>
                     <ul class="list-unstyled">
-                        <li><i class="bi bi-info-circle"></i> ID: {{this.id}}</li>
+                        <!-- <li><i class="bi bi-info-circle"></i> ID: {{this.id}}</li> -->
                         <li><i class="bi bi-file-text"></i> Description: {{this.description}}</li>
                         <li><i class="bi bi-currency-dollar"></i> Price: ${{this.price}}</li>
                         <li><i class="bi bi-grid"></i> Category: {{this.category}}</li>
@@ -71,7 +68,7 @@
                         Agregar al Carro
                     </button>
                     <!-- Botón Ver Detalles -->
-                    <a href="/products/{{this._id}}" class="btn btn-primary">Ver detalles</a>
+                    <a href="/api/products/{{this._id}}" class="btn btn-primary">Ver detalles</a>
                 </div>
             </div>
         </div>
