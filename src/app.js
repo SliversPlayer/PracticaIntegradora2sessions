@@ -27,8 +27,7 @@ const conString = `mongodb+srv://${user}:${pass}@cluster0.24yvhip.mongodb.net/${
 
 // Conexión a MongoDB
 mongoose.connect(conString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+
 }).then(() => {
     console.log('Conectado a MongoDB');
 }).catch((error) => {
@@ -63,7 +62,7 @@ app.use('/api/messages', messagesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/sessions', sessionsRouter);
+app.use('/sessions', sessionsRouter);
 
 const httpServer = app.listen(PORT, () => {
     try {
