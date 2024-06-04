@@ -41,3 +41,8 @@ body {
     padding: 10px 20px;
     color:yellowgreen
 }
+
+.btn-custom {
+        background-color: #c71c55 !important;
+        color: white !important;
+    }
