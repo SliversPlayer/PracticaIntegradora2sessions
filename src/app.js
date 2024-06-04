@@ -61,7 +61,6 @@ app.use('/', viewsRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
-//app.use('/api/users', usersRouter);
 app.use('/api/sessions', sessionsRouter);
 
 const httpServer = app.listen(PORT, () => {
