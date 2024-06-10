@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import path from 'path';
 import { __dirname } from '../utils.js';
 import { Server } from 'socket.io';
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
 
 // Importa tus routers y otros módulos necesarios
 import productsRouter from '../src/routes/products.router.js';
@@ -55,6 +57,10 @@ app.use(session({
     store: MongoStore.create({ mongoUrl: conString }),
     // cookie: { maxAge: 180 * 60 * 1000 },
 }));
+
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Middleware para manejar las rutas
 app.use('/', viewsRouter);
