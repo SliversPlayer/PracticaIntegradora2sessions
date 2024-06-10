@@ -1,7 +1,5 @@
 import { Router } from 'express';
-import User from '../../models/user.model.js';
-import { createHash, isValidPassword } from '../../../utils.js';
-import passport from 'passport'; // Importa el módulo de Passport
+import passport from 'passport'; 
 
 
 const router = Router(); 
