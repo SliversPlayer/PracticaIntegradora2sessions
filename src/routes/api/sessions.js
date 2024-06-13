@@ -33,6 +33,12 @@ router.post('/login', passport.authenticate('login',{failureRedirect:'failLogin'
 router.get('/faillogin', (req,res) => {
     res.send({ error: "Login fallido"})
 });
+
+router.get('/github', passport.authenticate('github',{scope:'user.email'}),async(req,res)=>{})
+
+router.get('/githubcallback',passport.authenticate('github',{failureRedirect:'/login'}),async(req,res)=>{
+    req.session.user = req.user
+})
 router.post('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) return res.status(500).send('Error al cerrar sesión');

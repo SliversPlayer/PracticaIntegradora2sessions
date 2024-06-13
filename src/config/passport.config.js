@@ -1,5 +1,6 @@
 import passport from "passport";
 import local from 'passport-local';
+import GitHubStrategy from 'passport-github2';
 import usersModel from '../models/user.model.js'
 import { createHash, isValidPassword } from "../../utils.js";
 
@@ -33,6 +34,36 @@ const initializePassport=()=>{
             }
         }
     ))
+
+    passport.use('github', new GitHubStrategy({
+        clientID: "Iv23li31EN8JaTViDu3h",
+        clientSecret: "6c7c5acbeedc6ba73ddda81cd9398d31b131fda9",
+        callbackURL: "http://localhost:8080/api/sessions/githubcallback"
+    }, async(accessToken, refreshToken, profile, done)=>{
+        try {
+            console.log(profile);
+            let user = await userService.findOne({email: profile._json.email})
+            if(!user){
+                let newUser={
+                    first_name:profile._json.name,
+                    last_name:"",
+                    age: 89,
+                    email:profile._json.email,
+                    password:""
+                }
+                let result = await userService.create(newUser)
+                done(null,user)
+            }
+            else{
+                done(null,user)
+            }
+        } catch (error) {
+            return done(error)
+        }
+    }
+))
+
+
     //Serializar y deserializar
     passport.serializeUser((user,done)=>{
         done(null,user._id)

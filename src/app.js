@@ -17,7 +17,10 @@ import messagesRouter from '../src/routes/messages.router.js';
 import viewsRouter from '../src/routes/views.router.js';
 import socketProducts from './listener/socketProducts.js';
 import sessionsRouter from './routes/api/sessions.js';
-
+// appname RefactorLogin53150
+// callback url http://localhost:8080/api/sessions/githubcallback
+// Client ID: Iv23li31EN8JaTViDu3h
+// Cliente secret: 6c7c5acbeedc6ba73ddda81cd9398d31b131fda9
 const app = express();
 const PORT = 8080;
 
