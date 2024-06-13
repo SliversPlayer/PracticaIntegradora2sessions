@@ -8,6 +8,7 @@ import { __dirname } from '../utils.js';
 import { Server } from 'socket.io';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
+import dotenv from 'dotenv';
 
 // Importa tus routers y otros módulos necesarios
 import productsRouter from '../src/routes/products.router.js';
@@ -17,18 +18,21 @@ import messagesRouter from '../src/routes/messages.router.js';
 import viewsRouter from '../src/routes/views.router.js';
 import socketProducts from './listener/socketProducts.js';
 import sessionsRouter from './routes/api/sessions.js';
+
+// Cargar variables de entorno
+dotenv.config();
+
 // appname RefactorLogin53150
 // callback url http://localhost:8080/api/sessions/githubcallback
 // Client ID: Iv23li31EN8JaTViDu3h
 // Cliente secret: 6c7c5acbeedc6ba73ddda81cd9398d31b131fda9
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
+
 
 // Variables de conexión
-const db = 'ecommerce';
-const user = 'usuario1';
-const pass = encodeURIComponent('123456a.');
-const conString = `mongodb+srv://${user}:${pass}@cluster0.24yvhip.mongodb.net/${db}?retryWrites=true&w=majority&appName=Cluster0`;
+const conString = `mongodb+srv://usuario1:123456a.@cluster0.24yvhip.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0`;
+//const conString = process.env.MONGO_URI;
 
 // Conexión a MongoDB
 mongoose.connect(conString, {
@@ -58,7 +62,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({ mongoUrl: conString }),
-    // cookie: { maxAge: 180 * 60 * 1000 },
 }));
 
 initializePassport()
