@@ -4,15 +4,11 @@ import GitHubStrategy from 'passport-github2';
 import usersModel from '../models/user.model.js'
 import { createHash, isValidPassword } from "../utils.js";
 import dotenv from 'dotenv';
-
 // Cargar variables de entorno
 dotenv.config();
-
 const userService = usersModel;
 const LocalStrategy = local.Strategy
-
 const initializePassport=()=>{
-
     //Estrategias/Middlewares
     passport.use('register', new LocalStrategy(
         { passReqToCallback: true, usernameField: 'email' },
@@ -38,7 +34,6 @@ const initializePassport=()=>{
             }
         }
     ))
-
     passport.use('github', new GitHubStrategy({
         clientID: "Iv23li31EN8JaTViDu3h",
         clientSecret: "6c7c5acbeedc6ba73ddda81cd9398d31b131fda9",
@@ -69,18 +64,14 @@ const initializePassport=()=>{
         }
     }
 ))
-
-
     //Serializar y deserializar
     passport.serializeUser((user,done)=>{
         done(null,user._id)
     })
-
     passport.deserializeUser(async(id,done)=>{
         let user = await userService.findById(id)
         done(null,user)
     })
-
     passport.use('login', new LocalStrategy({usernameField:'email'}, async(username,password,done)=>{
         try {
             const user = await userService.findOne({email:username})
@@ -94,7 +85,5 @@ const initializePassport=()=>{
             return done(error)
         }
     }))
-
 }
-
 export default initializePassport
