@@ -16,7 +16,7 @@ import messagesRouter from '../src/routes/messages.router.js';
 import viewsRouter from '../src/routes/views.router.js';
 import socketProducts from './listener/socketProducts.js';
 import sessionsRouter from './routes/api/sessions.js';
-// Cargar variables de entorno Hola
+// Cargar variables de entorno
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
